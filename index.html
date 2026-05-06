@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Самрау | Издательство полного цикла</title>
+    <meta name="description" content="Издательство Самрау в Уфе: полиграфия, сувенирная продукция, дизайнерские услуги. Печать книг, брендирование, разработка макетов.">
+    <meta name="keywords" content="издательство Уфа, полиграфия Уфа, печать книг, сувениры с логотипом, дизайн Уфа">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+    <!-- ШАПКА -->
+    <header class="header glass">
+        <div class="container header-container">
+            <div class="logo">
+                <img src="img/лого Самрау.jpg" alt="Самрау" onerror="this.src='https://placehold.co/200x60/041949/white?text=Самрау'">
+            </div>
+            
+            <div class="search-wrapper">
+                <input type="text" id="searchInput" placeholder="Поиск услуг..." class="search-input" value="">
+                <button id="searchBtn" class="search-btn"><i class="fas fa-search"></i></button>
+            </div>
+            
+            <nav class="nav-menu">
+                <ul>
+                    <li><a href="#catalog">Услуги</a></li>
+                    <li><a href="#reviews">Отзывы</a></li>
+                    <li><a href="#order">Заявка</a></li>
+                    <li><a href="#faq">Вопросы</a></li>
+                    <li><a href="#contact">Контакты</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- СЛАЙДЕР -->
+        <section class="slider-section">
+            <div class="container slider-container">
+                <button class="slider-arrow prev-arrow glass"><i class="fas fa-chevron-left"></i></button>
+                <button class="slider-arrow next-arrow glass"><i class="fas fa-chevron-right"></i></button>
+                
+                <div class="slider glass">
+                    <div class="slide active">
+                        <h1>Издайте свою книгу <br><span class="gold-text">с профессионалами!</span></h1>
+                        <p class="slide-subtitle">Печать, вёрстка, дизайн — полный цикл услуг</p>
+                        <a href="#order" class="btn btn-primary">Оставить заявку</a>
+                    </div>
+                    
+                    <div class="slide">
+                        <h2>Премиальная <span class="gold-text">полиграфия</span></h2>
+                        <p>От визиток до подарочных изданий. Работаем с дизайнерами и без.</p>
+                        <a href="#catalog" class="btn btn-primary">Смотреть каталог</a>
+                    </div>
+                    
+                    <div class="slide">
+                        <h2>Сувениры <span class="gold-text">с логотипом</span></h2>
+                        <p>Брендирование одежды, посуды, настольные календари, блокноты.</p>
+                        <a href="#catalog" class="btn btn-primary">Выбрать</a>
+                    </div>
+                </div>
+                
+                <div class="slider-dots">
+                    <span class="dot active-dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- КАТАЛОГ -->
+        <section id="catalog" class="catalog-section">
+            <div class="container">
+                <h2 class="section-title">Наши <span class="gold-text">услуги</span></h2>
+                
+                <div class="categories-grid" id="categoriesGrid">
+                    <!-- Загружается из JSON -->
+                </div>
+                
+                <!-- БЛОК ПОРТФОЛИО - СЛАЙДЕР -->
+                <div class="portfolio-section">
+                    <h3 class="portfolio-title">Примеры наших <span class="gold-text">работ</span></h3>
+                    
+                    <div class="portfolio-slider-container">
+                        <button class="slider-portfolio-btn prev-portfolio" id="prevPortfolioBtn"><i class="fas fa-chevron-left"></i></button>
+                        
+                        <div class="portfolio-slider-wrapper">
+                            <div class="portfolio-slider-track" id="portfolioSliderTrack">
+                                <div class="portfolio-slide">
+                                    <img src="img/книжки.jpg" alt="Книги">
+                                    <div class="portfolio-slide-info">
+                                        <h4>Художественные книги</h4>
+                                        <p>Твердый и мягкий переплет, дизайн обложки</p>
+                                    </div>
+                                </div>
+                                <div class="portfolio-slide">
+                                    <img src="img/виз.jpg" alt="Премиальные визитки">
+                                    <div class="portfolio-slide-info">
+                                        <h4>Премиальные визитки</h4>
+                                        <p>Дизайн, печать, ламинация</p>
+                                    </div>
+                                </div>
+                                <div class="portfolio-slide">
+                                    <img src="img/настольный календарь.jpg" alt="Настольный календарь">
+                                    <div class="portfolio-slide-info">
+                                        <h4>Настольный календарь</h4>
+                                        <p>Индивидуальный дизайн</p>
+                                    </div>
+                                </div>
+                                <div class="portfolio-slide">
+                                    <img src="img/упаковка.jpg" alt="Брендированная упаковка">
+                                    <div class="portfolio-slide-info">
+                                        <h4>Брендированная упаковка</h4>
+                                        <p>Разработка и печать</p>
+                                    </div>
+                                </div>
+                                <div class="portfolio-slide">
+                                    <img src="img/фотоальбом.jpg" alt="Фотоальбом">
+                                    <div class="portfolio-slide-info">
+                                        <h4>Фотоальбом</h4>
+                                        <p>Премиальная печать, дизайн-макет</p>
+                                    </div>
+                                </div>
+                                <div class="portfolio-slide">
+                                    <img src="img/медали.jpg" alt="Медали и значки">
+                                    <div class="portfolio-slide-info">
+                                        <h4>Медали и значки</h4>
+                                        <p>Лазерная гравировка, эксклюзивный дизайн</p>
+                                    </div>
+                                </div>
+                                <div class="portfolio-slide">
+                                    <img src="img/брошюры.jpg" alt="Брошюры">
+                                    <div class="portfolio-slide-info">
+                                        <h4>Брошюры</h4>
+                                        <p>Цветная печать, ламинация</p>
+                                    </div>
+                                </div>
+                                <div class="portfolio-slide">
+                                    <img src="img/пакеты.jpg" alt="Пакеты">
+                                    <div class="portfolio-slide-info">
+                                        <h4>Пакеты</h4>
+                                        <p>Крафтовые, с логотипом</p>
+                                    </div>
+                                </div>
+                                <div class="portfolio-slide">
+                                    <img src="img/бейдж.jpg" alt="Бейдж">
+                                    <div class="portfolio-slide-info">
+                                        <h4>Бейдж</h4>
+                                        <p>Пластик, металл, с креплением</p>
+                                    </div>
+                                </div>
+                                <div class="portfolio-slide">
+                                    <img src="img/ручки.jpg" alt="Ручки">
+                                    <div class="portfolio-slide-info">
+                                        <h4>Ручки</h4>
+                                        <p>С логотипом, гравировка</p>
+                                    </div>
+                                </div>
+                                <div class="portfolio-slide">
+                                    <img src="img/пригласительные.jpg" alt="Пригласительные на свадьбу">
+                                    <div class="portfolio-slide-info">
+                                        <h4>Пригласительные на свадьбу</h4>
+                                        <p>Эксклюзивный дизайн, тиснение золотом и серебром</p>
+                                    </div>
+                                </div>
+                                <div class="portfolio-slide">
+                                    <img src="img/настольные игры.jpg" alt="Настольные игры">
+                                    <div class="portfolio-slide-info">
+                                        <h4>Настольные игры</h4>
+                                        <p>Индивидуальный дизайн, подарочная упаковка</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button class="slider-portfolio-btn next-portfolio" id="nextPortfolioBtn"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    
+                    <div class="portfolio-dots" id="portfolioDots"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- КАК МЫ РАБОТАЕМ -->
+        <section class="steps-section">
+            <div class="container">
+                <h2 class="section-title">Как <span class="gold-text">заказать</span></h2>
+                
+                <div class="steps-grid">
+                    <div class="step-card glass">
+                        <div class="step-number">1</div>
+                        <h3>Выберите услугу</h3>
+                        <p>Ознакомьтесь с каталогом и выберите нужную продукцию</p>
+                    </div>
+                    <div class="step-card glass">
+                        <div class="step-number">2</div>
+                        <h3>Отправьте заявку</h3>
+                        <p>Заполните форму обратной связи или позвоните нам</p>
+                    </div>
+                    <div class="step-card glass">
+                        <div class="step-number">3</div>
+                        <h3>Свяжемся с вами</h3>
+                        <p>Мы уточним детали и подготовим коммерческое предложение</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+                <!-- ОТЗЫВЫ -->
+        <section id="reviews" class="reviews-section">
+            <div class="container">
+                <h2 class="section-title"><span class="gold-text">Отзывы</span> наших клиентов</h2>
+                
+                <div class="reviews-grid">
+                    <div class="review-card glass">
+                        <div class="review-header">
+                            <div class="review-user">
+                                <i class="fas fa-user-circle review-icon"></i>
+                                <span class="review-name">Регина</span>
+                            </div>
+                            <div class="review-rating">
+                                <i class="fas fa-star gold-text"></i>
+                                <i class="fas fa-star gold-text"></i>
+                                <i class="fas fa-star gold-text"></i>
+                                <i class="fas fa-star gold-text"></i>
+                                <i class="fas fa-star gold-text"></i>
+                            </div>
+                        </div>
+                        <p class="review-text">Заказывали благодарственные письма для детей — отличное качество! Приятные бонусы и скидки. Обязательно обратимся снова.</p>
+                    </div>
+                    
+                    <div class="review-card glass">
+                        <div class="review-header">
+                            <div class="review-user">
+                                <i class="fas fa-user-circle review-icon"></i>
+                                <span class="review-name">Фаурия М.</span>
+                            </div>
+                            <div class="review-rating">
+                                <i class="fas fa-star gold-text"></i>
+                                <i class="fas fa-star gold-text"></i>
+                                <i class="fas fa-star gold-text"></i>
+                                <i class="fas fa-star gold-text"></i>
+                                <i class="fas fa-star gold-text"></i>
+                            </div>
+                        </div>
+                        <p class="review-text">Заказывали приглашения на свадьбу. Всё выполнено качественно и в срок. Очень демократичные цены, спасибо!</p>
+                    </div>
+                    
+                    <div class="review-card glass">
+                        <div class="review-header">
+                            <div class="review-user">
+                                <i class="fas fa-user-circle review-icon"></i>
+                                <span class="review-name">Айдар З.</span>
+                            </div>
+                            <div class="review-rating">
+                                <i class="fas fa-star gold-text"></i>
+                                <i class="fas fa-star gold-text"></i>
+                                <i class="fas fa-star gold-text"></i>
+                                <i class="fas fa-star gold-text"></i>
+                                <i class="fas fa-star gold-text"></i>
+                            </div>
+                        </div>
+                        <p class="review-text">Заказывали баннеры для мероприятия — стильные и современные. Отличный дизайн и качество печати. Рекомендую!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ФОРМА ЗАЯВКИ -->
+        <section id="order" class="order-section">
+            <div class="container">
+                <div class="order-form-container glass">
+                    <h2 class="form-title">Оставьте заявку <span class="gold-text">— мы перезвоним!</span></h2>
+                    
+                    <form id="orderForm" class="order-form">
+                        <div class="form-group">
+                            <label for="name">Имя *</label>
+                            <input type="text" id="name" name="name" placeholder="Ваше имя" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contact">Телефон / Email *</label>
+                            <input type="text" id="contact" name="contact" placeholder="+7 (999) 123-45-67" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="service">Услуга</label>
+                            <select id="service" name="service">
+                                <option value="Полиграфия">Полиграфия</option>
+                                <option value="Сувенирная продукция">Сувенирная продукция</option>
+                                <option value="Дизайн">Дизайн</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Дополнительная информация</label>
+                            <textarea id="message" name="message" rows="3" placeholder="Тираж, сроки, пожелания..."></textarea>
+                        </div>
+                        <input type="hidden" id="csrfToken" name="csrf_token">
+                        <button type="submit" class="btn btn-primary form-submit">Отправить заявку</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- ЧАСТО СПРАШИВАЮТ -->
+        <section id="faq" class="faq-section">
+            <div class="container">
+                <h2 class="section-title">Часто <span class="gold-text">спрашивают</span></h2>
+                
+                <div class="faq-grid">
+                    <div class="faq-item glass">
+                        <div class="faq-question"><span>Какие сроки изготовления?</span><i class="fas fa-chevron-down"></i></div>
+                        <div class="faq-answer"><p>Стандартный срок изготовления от 3 до 14 дней в зависимости от сложности заказа и тиража. Срочные заказы обсуждаются индивидуально.</p></div>
+                    </div>
+                    <div class="faq-item glass">
+                        <div class="faq-question"><span>Есть ли минимальная сумма заказа?</span><i class="fas fa-chevron-down"></i></div>
+                        <div class="faq-answer"><p>Минимальная сумма заказа — 500 рублей. Для корпоративных клиентов работаем по индивидуальным условиям.</p></div>
+                    </div>
+                    <div class="faq-item glass">
+                        <div class="faq-question"><span>Можно ли получить образцы?</span><i class="fas fa-chevron-down"></i></div>
+                        <div class="faq-answer"><p>Да, мы предоставляем образцы материалов и печати. Образцы можно получить в нашем офисе в Уфе.</p></div>
+                    </div>
+                    <div class="faq-item glass">
+                        <div class="faq-question"><span>Есть ли доставка по России?</span><i class="fas fa-chevron-down"></i></div>
+                        <div class="faq-answer"><p>Да, мы доставляем заказы по всей России через СДЭК, Почту России и транспортные компании.</p></div>
+                    </div>
+                    <div class="faq-item glass">
+                        <div class="faq-question"><span>Какие форматы файлов вы принимаете?</span><i class="fas fa-chevron-down"></i></div>
+                        <div class="faq-answer"><p>Принимаем файлы в форматах: PDF, AI, PSD, CDR, EPS, JPG, PNG (300 dpi).</p></div>
+                    </div>
+                    <div class="faq-item glass">
+                        <div class="faq-question"><span>Как оплатить заказ?</span><i class="fas fa-chevron-down"></i></div>
+                        <div class="faq-answer"><p>Наличный и безналичный расчет, оплата по счету для юрлиц, перевод на карту.</p></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- КОНТАКТЫ -->
+        <section id="contact" class="contact-section">
+            <div class="container">
+                <h2 class="section-title">Наши <span class="gold-text">контакты</span></h2>
+                
+                <div class="contact-grid">
+                    <div class="contact-info glass">
+                        <h3>Свяжитесь с нами</h3>
+                        <div class="contact-details">
+                            <div class="contact-item">
+                                <i class="fas fa-phone-alt"></i>
+                                <div class="contact-item-content">
+                                    <span class="contact-label">Телефон</span>
+                                    <span class="contact-value">+7-347-266-48-43</span>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-envelope"></i>
+                                <div class="contact-item-content">
+                                    <span class="contact-label">Email</span>
+                                    <span class="contact-value">mediasamrau@yandex.ru</span>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <div class="contact-item-content">
+                                    <span class="contact-label">Адрес</span>
+                                    <span class="contact-value">г. Уфа, ул. Дуванский бульвар, д. 29</span>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-clock"></i>
+                                <div class="contact-item-content">
+                                    <span class="contact-label">Режим работы</span>
+                                    <span class="contact-value">Пн-Пт: 9:00 - 18:00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-map glass">
+                        <img src="img/map.png" alt="Карта проезда">
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ПОДВАЛ -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-col">
+                    <h4>Самрау</h4>
+                    <p>Издательство полного цикла. Работаем с 2015 года.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Навигация</h4>
+                    <ul>
+                        <li><a href="#catalog">Услуги</a></li>
+                        <li><a href="#reviews">Отзывы</a></li>
+                        <li><a href="#order">Заявка</a></li>
+                        <li><a href="#faq">Вопросы</a></li>
+                        <li><a href="#contact">Контакты</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Контакты</h4>
+                    <p>+7-347-266-48-43</p>
+                    <p>mediasamrau@yandex.ru</p>
+                    <p>Уфа, Дуванский б-р, 29</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 Издательство "Самрау". Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- МОДАЛЬНЫЕ ОКНА -->
+    <div id="servicesModal" class="modal">
+        <div class="modal-content glass">
+            <span class="modal-close">&times;</span>
+            <h2 id="modalTitle">Услуги</h2>
+            <div id="modalServicesList" class="services-list-modal"></div>
+        </div>
+    </div>
+    <div id="searchModal" class="modal">
+        <div class="modal-content glass">
+            <span class="modal-close search-modal-close">&times;</span>
+            <h2><i class="fas fa-search"></i> Результаты поиска</h2>
+            <div id="searchResults" class="services-list-modal"></div>
+        </div>
+    </div>
+    <div id="adminModal" class="modal">
+        <div class="modal-content glass admin-modal">
+            <span class="modal-close admin-close">&times;</span>
+            <h2><i class="fas fa-lock"></i> Вход в панель администратора</h2>
+            <div id="adminLoginForm" class="admin-login-form">
+                <div class="form-group"><label>Логин</label><input type="text" id="adminLogin" placeholder="Введите логин"></div>
+                <div class="form-group"><label>Пароль</label><input type="password" id="adminPassword" placeholder="Введите пароль"></div>
+                <button class="btn btn-primary" onclick="checkAdminLogin()">Войти</button>
+            </div>
+            <div id="adminPanel" style="display: none;">
+                <h3><i class="fas fa-chart-line"></i> Статистика заявок</h3>
+                <div id="adminStats" class="glass"></div>
+                <div id="adminSubmissionsList"></div>
+                <button class="btn btn-secondary" onclick="logoutAdmin()">Выйти</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
