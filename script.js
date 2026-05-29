@@ -29,6 +29,133 @@ function safeSetSubmissions(submissions) {
     }
 }
 
+// ========== ФУНКЦИЯ ДЛЯ ПРИВЕДЕНИЯ СЛОВА К КОРНЮ (ПРОСТОЙ СТЕММИНГ) ==========
+function getWordRoot(word) {
+    if (!word) return '';
+    const lowerWord = word.toLowerCase();
+    
+    // Окончания для русского языка (самые частые)
+    const endings = [
+        'ая', 'яя', 'ее', 'ие', 'ые', 'ое', 'ие',
+        'ой', 'ей', 'ый', 'ий', 'ой', 'ей',
+        'ую', 'юю', 'ею', 'ою', 'ую',
+        'ых', 'их',
+        'ам', 'ям', 'ом', 'ем', 'ам', 'ям', 'ом', 'ем',
+        'ами', 'ями',
+        'ах', 'ях',
+        'а', 'я', 'е', 'и', 'ы', 'о', 'у', 'ю',
+        'в', 'вш', 'вши', 'ть', 'ти', 'чь',
+        'ую', 'юю', 'ее', 'ие', 'ые', 'ое',
+        'нн', 'енн', 'онн', 'н', 'ен', 'он',
+        'ск', 'ческ', 'овск', 'евск',
+        'тель', 'ниц', 'ость', 'ени', 'аци'
+    ];
+    
+    let root = lowerWord;
+    for (let i = 0; i < endings.length; i++) {
+        const ending = endings[i];
+        if (root.length > ending.length && root.endsWith(ending)) {
+            root = root.slice(0, -ending.length);
+            break;
+        }
+    }
+    
+    // Если корень слишком короткий, возвращаем исходное слово
+    if (root.length < 2) return lowerWord;
+    return root;
+}
+
+// ========== РАСШИРЕННЫЙ ПОИСК С УЧЁТОМ КОРНЕЙ СЛОВ ==========
+function searchServices(query) {
+    if (!servicesData || !servicesData.categories) return [];
+    if (!query || !query.trim()) return [];
+    
+    const results = [];
+    const originalQuery = query.trim().toLowerCase();
+    const queryRoot = getWordRoot(originalQuery);
+    
+    // Разбиваем запрос на отдельные слова
+    const queryWords = originalQuery.split(/\s+/);
+    const queryRoots = queryWords.map(word => getWordRoot(word));
+    
+    for (let i = 0; i < servicesData.categories.length; i++) {
+        const category = servicesData.categories[i];
+        if (!category.services) continue;
+        
+        for (let j = 0; j < category.services.length; j++) {
+            const service = category.services[j];
+            const serviceName = (service.name || '').toLowerCase();
+            const serviceDesc = (service.description || '').toLowerCase();
+            const categoryName = (category.name || '').toLowerCase();
+            
+            let matched = false;
+            
+            // 1. Прямое совпадение подстроки (как было раньше)
+            if (serviceName.indexOf(originalQuery) !== -1 || 
+                serviceDesc.indexOf(originalQuery) !== -1 ||
+                categoryName.indexOf(originalQuery) !== -1) {
+                matched = true;
+            }
+            
+            // 2. Поиск по корню запроса (например "книг" найдёт "книги", "книга", "книжка")
+            if (!matched && queryRoot.length >= 2) {
+                const serviceNameRoot = getWordRoot(serviceName);
+                const serviceDescRoot = getWordRoot(serviceDesc);
+                const categoryNameRoot = getWordRoot(categoryName);
+                
+                if (serviceNameRoot.indexOf(queryRoot) !== -1 ||
+                    serviceDescRoot.indexOf(queryRoot) !== -1 ||
+                    categoryNameRoot.indexOf(queryRoot) !== -1) {
+                    matched = true;
+                }
+            }
+            
+            // 3. Поиск по каждому слову из запроса (для фраз из нескольких слов)
+            if (!matched && queryWords.length > 1) {
+                for (let w = 0; w < queryWords.length; w++) {
+                    const word = queryWords[w];
+                    if (word.length < 2) continue;
+                    const wordRoot = queryRoots[w];
+                    
+                    if (serviceName.indexOf(word) !== -1 ||
+                        serviceDesc.indexOf(word) !== -1 ||
+                        categoryName.indexOf(word) !== -1) {
+                        matched = true;
+                        break;
+                    }
+                    
+                    if (wordRoot.length >= 2 && 
+                        (getWordRoot(serviceName).indexOf(wordRoot) !== -1 ||
+                         getWordRoot(serviceDesc).indexOf(wordRoot) !== -1)) {
+                        matched = true;
+                        break;
+                    }
+                }
+            }
+            
+            if (matched) {
+                results.push({
+                    ...service,
+                    categoryName: category.name
+                });
+            }
+        }
+    }
+    
+    // Удаляем дубликаты (по id)
+    const uniqueResults = [];
+    const seenIds = {};
+    for (let i = 0; i < results.length; i++) {
+        const id = results[i].id;
+        if (!seenIds[id]) {
+            seenIds[id] = true;
+            uniqueResults.push(results[i]);
+        }
+    }
+    
+    return uniqueResults;
+}
+
 // ========== ЗАГРУЗКА КАТАЛОГА ИЗ JSON ==========
 async function loadCatalog() {
     try {
@@ -205,34 +332,6 @@ function showServicesModal(category) {
     }
 }
 
-function searchServices(query) {
-    if (!servicesData || !servicesData.categories) return [];
-    if (!query || !query.trim()) return [];
-    
-    const results = [];
-    const lowerQuery = query.toLowerCase();
-    
-    for (let i = 0; i < servicesData.categories.length; i++) {
-        const category = servicesData.categories[i];
-        if (category.services) {
-            for (let j = 0; j < category.services.length; j++) {
-                const service = category.services[j];
-                const serviceName = service.name || '';
-                const serviceDesc = service.description || '';
-                if (serviceName.toLowerCase().indexOf(lowerQuery) !== -1 || 
-                    serviceDesc.toLowerCase().indexOf(lowerQuery) !== -1) {
-                    results.push({
-                        ...service,
-                        categoryName: category.name
-                    });
-                }
-            }
-        }
-    }
-    
-    return results;
-}
-
 function showSearchModal(query) {
     const results = searchServices(query);
     const modal = document.getElementById('searchModal');
@@ -246,8 +345,8 @@ function showSearchModal(query) {
         resultsContainer.innerHTML = `
             <div class="service-item">
                 <div class="service-info">
-                    <h4>Ничего не найдено</h4>
-                    <p>Попробуйте другое слово для поиска</p>
+                    <h4>😕 Ничего не найдено</h4>
+                    <p>По запросу «${escapeHtml(query)}» ничего не найдено.<br>Попробуйте ввести часть слова (например, «книг» вместо «книга»)</p>
                 </div>
             </div>`;
     } else {
@@ -640,7 +739,7 @@ function initSmoothScroll() {
     }
 }
 
-// ========== ПОРТФОЛИО СЛАЙДЕР (ГАРАНТИРОВАННО РАБОТАЕТ) ==========
+// ========== ПОРТФОЛИО СЛАЙДЕР ==========
 let portfolioCurrentIndex = 0;
 let portfolioSlidesPerView = 4;
 let portfolioTotalSlides = 0;
