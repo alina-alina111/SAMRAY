@@ -34,7 +34,6 @@ function getWordRoot(word) {
     if (!word) return '';
     const lowerWord = word.toLowerCase();
     
-    // Окончания для русского языка (самые частые)
     const endings = [
         'ая', 'яя', 'ее', 'ие', 'ые', 'ое', 'ие',
         'ой', 'ей', 'ый', 'ий', 'ой', 'ей',
@@ -60,7 +59,6 @@ function getWordRoot(word) {
         }
     }
     
-    // Если корень слишком короткий, возвращаем исходное слово
     if (root.length < 2) return lowerWord;
     return root;
 }
@@ -74,7 +72,6 @@ function searchServices(query) {
     const originalQuery = query.trim().toLowerCase();
     const queryRoot = getWordRoot(originalQuery);
     
-    // Разбиваем запрос на отдельные слова
     const queryWords = originalQuery.split(/\s+/);
     const queryRoots = queryWords.map(word => getWordRoot(word));
     
@@ -90,14 +87,12 @@ function searchServices(query) {
             
             let matched = false;
             
-            // 1. Прямое совпадение подстроки (как было раньше)
             if (serviceName.indexOf(originalQuery) !== -1 || 
                 serviceDesc.indexOf(originalQuery) !== -1 ||
                 categoryName.indexOf(originalQuery) !== -1) {
                 matched = true;
             }
             
-            // 2. Поиск по корню запроса (например "книг" найдёт "книги", "книга", "книжка")
             if (!matched && queryRoot.length >= 2) {
                 const serviceNameRoot = getWordRoot(serviceName);
                 const serviceDescRoot = getWordRoot(serviceDesc);
@@ -110,7 +105,6 @@ function searchServices(query) {
                 }
             }
             
-            // 3. Поиск по каждому слову из запроса (для фраз из нескольких слов)
             if (!matched && queryWords.length > 1) {
                 for (let w = 0; w < queryWords.length; w++) {
                     const word = queryWords[w];
@@ -142,7 +136,6 @@ function searchServices(query) {
         }
     }
     
-    // Удаляем дубликаты (по id)
     const uniqueResults = [];
     const seenIds = {};
     for (let i = 0; i < results.length; i++) {
@@ -403,27 +396,77 @@ function showSearchModal(query) {
     }
 }
 
+// ========== ВАЛИДАЦИЯ ФОРМЫ ==========
 function initFormSubmit() {
     const form = document.getElementById('orderForm');
-    if (form) {
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
+    if (!form) return;
+
+    form.setAttribute('novalidate', true);
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const nameInput = document.getElementById('name');
+        const contactInput = document.getElementById('contact');
+        const serviceSelect = document.getElementById('service');
+        const messageText = document.getElementById('message');
+
+        clearErrors(form);
+
+        let isValid = true;
+
+        // ---- Валидация имени ----
+        const name = nameInput ? nameInput.value.trim() : '';
+        if (!name) {
+            showFieldError(nameInput, 'Введите ваше имя');
+            isValid = false;
+        } else if (name.length < 2) {
+            showFieldError(nameInput, 'Имя должно содержать минимум 2 символа');
+            isValid = false;
+        } else if (!/^[a-zA-Zа-яА-ЯёЁ\s\-']+$/.test(name)) {
+            showFieldError(nameInput, 'Имя может содержать только буквы, пробелы, дефис и апостроф');
+            isValid = false;
+        }
+
+        // ---- Валидация контактов ----
+        const contact = contactInput ? contactInput.value.trim() : '';
+        if (!contact) {
+            showFieldError(contactInput, 'Введите телефон или email');
+            isValid = false;
+        } else {
+            const phonePatterns = [
+                /^\+7\s?\(?\d{3}\)?\s?\d{3}[\s\-]?\d{2}[\s\-]?\d{2}$/,
+                /^8\s?\(?\d{3}\)?\s?\d{3}[\s\-]?\d{2}[\s\-]?\d{2}$/,
+                /^\+?\d{10,15}$/,
+                /^\+?[0-9\s\-\(\)]{10,18}$/
+            ];
             
-            const nameInput = document.getElementById('name');
-            const contactInput = document.getElementById('contact');
-            const serviceSelect = document.getElementById('service');
-            const messageText = document.getElementById('message');
-            
-            const name = nameInput ? nameInput.value.trim() : '';
-            const contact = contactInput ? contactInput.value.trim() : '';
-            const service = serviceSelect ? serviceSelect.value : '';
-            const message = messageText ? messageText.value : '';
-            
-            if (!name || !contact) {
-                showNotification('Пожалуйста, заполните имя и контактные данные', 'error');
-                return;
+            const isPhone = phonePatterns.some(pattern => pattern.test(contact));
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const isEmail = emailPattern.test(contact);
+
+            if (!isPhone && !isEmail) {
+                showFieldError(contactInput, 'Введите корректный телефон (например, +7 999 123-45-67) или email');
+                isValid = false;
             }
-            
+        }
+
+        // ---- Валидация услуги ----
+        const service = serviceSelect ? serviceSelect.value : '';
+        if (!service) {
+            showFieldError(serviceSelect, 'Выберите услугу');
+            isValid = false;
+        }
+
+        // ---- Валидация сообщения ----
+        const message = messageText ? messageText.value.trim() : '';
+        if (message && message.length > 5000) {
+            showFieldError(messageText, 'Сообщение не должно превышать 5000 символов');
+            isValid = false;
+        }
+
+        // ---- Если форма валидна - сохраняем ----
+        if (isValid) {
             const formData = {
                 id: Date.now(),
                 name: name,
@@ -432,19 +475,162 @@ function initFormSubmit() {
                 message: message || 'не указано',
                 date: new Date().toLocaleString('ru-RU')
             };
-            
+
             let submissions = safeGetSubmissions();
             submissions.push(formData);
             safeSetSubmissions(submissions);
-            
+
             console.log('Заявка сохранена:', formData);
-            
-            showNotification('Заявка отправлена! Мы свяжемся с вами.', 'success');
+
+            showNotification('✅ Заявка отправлена! Мы свяжемся с вами.', 'success');
             form.reset();
             updateAdminStats();
+        } else {
+            showNotification('⚠️ Пожалуйста, исправьте ошибки в форме', 'error');
+            
+            const firstError = form.querySelector('.field-error');
+            if (firstError) {
+                const input = firstError.closest('.form-group').querySelector('input, select, textarea');
+                if (input) input.focus();
+            }
+        }
+    });
+
+    // ---- Валидация в реальном времени ----
+    const inputs = form.querySelectorAll('input, select, textarea');
+    inputs.forEach(input => {
+        input.addEventListener('blur', function() {
+            validateField(this);
         });
-    }
+        input.addEventListener('input', function() {
+            const errorEl = this.closest('.form-group').querySelector('.field-error');
+            if (errorEl) {
+                errorEl.remove();
+                this.style.borderColor = '';
+            }
+        });
+    });
 }
+
+// ========== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ДЛЯ ВАЛИДАЦИИ ==========
+
+function showFieldError(input, message) {
+    if (!input) return;
+    
+    const formGroup = input.closest('.form-group');
+    if (!formGroup) return;
+
+    const oldError = formGroup.querySelector('.field-error');
+    if (oldError) oldError.remove();
+
+    const errorEl = document.createElement('span');
+    errorEl.className = 'field-error';
+    errorEl.style.cssText = `
+        color: #f44336;
+        font-size: 0.85rem;
+        margin-top: 5px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        animation: fadeIn 0.3s ease;
+    `;
+    errorEl.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
+    
+    formGroup.appendChild(errorEl);
+    input.style.borderColor = '#f44336';
+}
+
+function clearErrors(form) {
+    const errors = form.querySelectorAll('.field-error');
+    errors.forEach(el => el.remove());
+    
+    const inputs = form.querySelectorAll('input, select, textarea');
+    inputs.forEach(input => {
+        input.style.borderColor = '';
+    });
+}
+
+function validateField(input) {
+    if (!input) return;
+    
+    const formGroup = input.closest('.form-group');
+    if (!formGroup) return;
+    
+    const oldError = formGroup.querySelector('.field-error');
+    if (oldError) oldError.remove();
+    
+    const id = input.id;
+    const value = input.value.trim();
+    let isValid = true;
+    let errorMessage = '';
+    
+    if (id === 'name') {
+        if (!value) {
+            errorMessage = 'Введите ваше имя';
+            isValid = false;
+        } else if (value.length < 2) {
+            errorMessage = 'Имя должно содержать минимум 2 символа';
+            isValid = false;
+        } else if (!/^[a-zA-Zа-яА-ЯёЁ\s\-']+$/.test(value)) {
+            errorMessage = 'Имя может содержать только буквы, пробелы, дефис и апостроф';
+            isValid = false;
+        }
+    }
+    
+    if (id === 'contact') {
+        if (!value) {
+            errorMessage = 'Введите телефон или email';
+            isValid = false;
+        } else {
+            const phonePatterns = [
+                /^\+7\s?\(?\d{3}\)?\s?\d{3}[\s\-]?\d{2}[\s\-]?\d{2}$/,
+                /^8\s?\(?\d{3}\)?\s?\d{3}[\s\-]?\d{2}[\s\-]?\d{2}$/,
+                /^\+?\d{10,15}$/,
+                /^\+?[0-9\s\-\(\)]{10,18}$/
+            ];
+            const isPhone = phonePatterns.some(pattern => pattern.test(value));
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const isEmail = emailPattern.test(value);
+            
+            if (!isPhone && !isEmail) {
+                errorMessage = 'Введите корректный телефон (например, +7 999 123-45-67) или email';
+                isValid = false;
+            }
+        }
+    }
+    
+    if (id === 'service') {
+        if (!value) {
+            errorMessage = 'Выберите услугу';
+            isValid = false;
+        }
+    }
+    
+    if (id === 'message') {
+        if (value && value.length > 5000) {
+            errorMessage = 'Сообщение не должно превышать 5000 символов';
+            isValid = false;
+        }
+    }
+    
+    if (!isValid) {
+        showFieldError(input, errorMessage);
+    } else {
+        input.style.borderColor = '#4CAF50';
+    }
+    
+    return isValid;
+}
+
+// Добавляем анимацию для ошибок
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-5px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+`;
+document.head.appendChild(style);
 
 const ADMIN_CREDENTIALS = {
     login: 'admin',
