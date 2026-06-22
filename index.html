@@ -15,7 +15,9 @@
     <header class="header glass">
         <div class="container header-container">
             <div class="logo">
-                <img src="img/лого Самрау.jpg" alt="Самрау" onerror="this.src='https://placehold.co/200x60/041949/white?text=Самрау'">
+                <a href="#" onclick="event.preventDefault(); window.scrollTo({top: 0, behavior: 'smooth'}); return false;" style="display: inline-block; cursor: pointer;">
+                    <img src="img/лого Самрау.jpg" alt="Самрау" onerror="this.src='https://placehold.co/200x60/041949/white?text=Самрау'">
+                </a>
             </div>
             
             <div class="search-wrapper">
@@ -208,7 +210,7 @@
             </div>
         </section>
 
-                <!-- ОТЗЫВЫ -->
+        <!-- ОТЗЫВЫ -->
         <section id="reviews" class="reviews-section">
             <div class="container">
                 <h2 class="section-title"><span class="gold-text">Отзывы</span> наших клиентов</h2>
@@ -274,7 +276,7 @@
                 <div class="order-form-container glass">
                     <h2 class="form-title">Оставьте заявку <span class="gold-text">— мы перезвоним!</span></h2>
                     
-                    <form id="orderForm" class="order-form">
+                    <form id="orderForm" class="order-form" novalidate>
                         <div class="form-group">
                             <label for="name">Имя *</label>
                             <input type="text" id="name" name="name" placeholder="Ваше имя" required>
@@ -286,6 +288,7 @@
                         <div class="form-group">
                             <label for="service">Услуга</label>
                             <select id="service" name="service">
+                                <option value="">Выберите услугу</option>
                                 <option value="Полиграфия">Полиграфия</option>
                                 <option value="Сувенирная продукция">Сувенирная продукция</option>
                                 <option value="Дизайн">Дизайн</option>
