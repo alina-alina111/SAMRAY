@@ -826,6 +826,38 @@ body {
     transform: translateY(-2px);
 }
 
+/* Стили для ошибок валидации */
+.field-error {
+    color: #f44336;
+    font-size: 0.85rem;
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    animation: fadeIn 0.3s ease;
+}
+
+.field-error i {
+    font-size: 0.9rem;
+}
+
+.form-group input.error,
+.form-group select.error,
+.form-group textarea.error {
+    border-color: #f44336 !important;
+}
+
+.form-group input.valid,
+.form-group select.valid,
+.form-group textarea.valid {
+    border-color: #4CAF50 !important;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 /* ========== FAQ ========== */
 .faq-grid {
     max-width: 800px;
